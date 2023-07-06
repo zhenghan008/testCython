@@ -54,6 +54,11 @@ cdef class Test:
         Test.pt["p_b"] = self.c_t.b.decode("utf8")
         return Test.pt
 
+
+    def get_p_b(self):
+        print("call get_p_b")
+        print(self.c_b.u.d.decode("utf8"),  self.c_b.t.b, self.c_b.t.a)
+
     def set_callback(self):
         return test.set_callback(self.c_call, self.c_t)
 

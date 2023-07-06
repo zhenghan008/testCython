@@ -23,10 +23,10 @@ typedef struct TestB {
 
 
 typedef void (*CallbackFunc)(int a);
-U* new_u (void* data,  char type_u);
-B* new_b(T* t, U* u);
-T* new_t(int a, char* b);
-T* set_t(T* t, int a, char* b);
+extern U* new_u (void* data,  char type_u);
+extern B* new_b(T* t, U* u);
+extern T* new_t(int a, char* b);
+extern T* set_t(T* t, int a, char* b);
 void set_callback(CallbackFunc func, T* t);
 
 #endif //TESTC_TEST_H
