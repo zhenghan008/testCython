@@ -7,6 +7,7 @@ from libc.stdlib cimport free
 
 
 
+
 cdef class Test:
 
     cdef test.T* c_t
@@ -15,21 +16,23 @@ cdef class Test:
     cdef int i
     cdef float f
     cdef char* s
-    cdef char* _type
     pt = {}
 
     def __cinit__(self, a: int, b: str, u_dict: dict):
         self.c_t = test.new_t(a, b.encode("utf8"))
+        _type_ = int.from_bytes(u_dict.get("type").encode(), "little")
         if u_dict.get("type") == "i":
             self.i = u_dict.get("data")
-            self.c_u = test.new_u(&self.i, b'i')
+            self.c_u = test.new_u(&self.i, _type_)
         elif u_dict.get("type") == "f":
             self.f = u_dict.get("data")
-            self.c_u = test.new_u(&self.f, b'f')
+            self.c_u = test.new_u(&self.f, _type_)
         elif u_dict.get("type") == "s":
             _data = u_dict.get("data").encode("utf8")
             self.s = _data
-            self.c_u = test.new_u(self.s, b's')
+            self.c_u = test.new_u(self.s, _type_)
+        else:
+            self.c_u = test.new_u(self.s, _type_)
         self.c_b = test.new_b(self.c_t, self.c_u)
 
 
