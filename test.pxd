@@ -6,7 +6,16 @@ cdef extern from "tp.h":
     ctypedef struct T:
        int a
        char b[SIZE_C]
+    ctypedef union U:
+        int c
+        char d[SIZE_C]
+        float e
+    ctypedef struct B:
+        T* t
+        U * u
     ctypedef void (*CallbackFunc) (int a)
-    T * new_t(int a, char * b)
+    U * new_u(void * data, char type_u)
+    B * new_b(T * t, U * u)
+    T*  new_t(int a, char * b)
     T * set_t(T * t, int a, char * b)
     void set_callback(CallbackFunc func, T * t)

@@ -6,13 +6,33 @@ from libc.stdlib cimport free
 
 
 
+
 cdef class Test:
 
     cdef test.T* c_t
+    cdef test.U* c_u
+    cdef test.B * c_b
+    cdef int i
+    cdef float f
+    cdef char* s
+    cdef char* _type
     pt = {}
 
-    def __cinit__(self, a: int, b: str):
+    def __cinit__(self, a: int, b: str, u_dict: dict):
         self.c_t = test.new_t(a, b.encode("utf8"))
+        if u_dict.get("type") == "i":
+            self.i = u_dict.get("data")
+            self.c_u = test.new_u(&self.i, b'i')
+        elif u_dict.get("type") == "f":
+            self.f = u_dict.get("data")
+            self.c_u = test.new_u(&self.f, b'f')
+        elif u_dict.get("type") == "s":
+            _data = u_dict.get("data").encode("utf8")
+            self.s = _data
+            self.c_u = test.new_u(self.s, b's')
+        self.c_b = test.new_b(self.c_t, self.c_u)
+
+
 
 
     def set_t(self, a1: int, b1: str):
@@ -37,7 +57,13 @@ cdef class Test:
 
     def __dealloc__(self):
         if self.c_t is not NULL:
-            print("free ptr")
+            print("free c_t ptr")
             free(self.c_t)
+        if self.c_u is not NULL:
+            print("free c_u ptr")
+            free(self.c_u)
+        if self.c_b is not NULL:
+            print("free c_b ptr")
+            free(self.c_b)
 
 
