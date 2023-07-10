@@ -44,8 +44,8 @@ cdef class Test:
         print(t1.a, t1.b.decode("utf8"))
 
 
-    @staticmethod
-    cdef void c_call (int a):
+    # be called for c or python
+    cpdef c_call (self, int a):
         res = a + 100
         print(f"call c_call res: {res}")
 
@@ -54,7 +54,6 @@ cdef class Test:
         Test.pt["p_a"] = self.c_t.a
         Test.pt["p_b"] = self.c_t.b.decode("utf8")
         return Test.pt
-
 
     def get_p_b(self):
         print("call get_p_b")
