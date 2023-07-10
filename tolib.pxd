@@ -1,7 +1,7 @@
 # distutils: sources = test-include/tp.h
 # distutils: include_dirs =test-include/
 
-cdef extern from "tp.h":
+cdef extern from "tp.h" nogil:
     DEF SIZE_C = 1000
     ctypedef struct T:
        int a
