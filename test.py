@@ -9,5 +9,5 @@ while 1:
     size += 1
     if size > 100:
         break
-for i in range(10):
+for i in range(20):
     print(o)

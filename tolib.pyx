@@ -37,6 +37,8 @@ cdef class Test:
         else:
             self.c_u = tolib.new_u(self.s, _type_)
         self.c_b = tolib.new_b(self.c_t, self.c_u)
+        Test.pb["T"]["a"] = self.c_b.t.a
+        Test.pb["T"]["b"] = self.c_t.b.decode("utf8")
 
 
     def set_t(self, a1: int, b1: str):
@@ -51,8 +53,6 @@ cdef class Test:
 
 
     def get_p_b(self):
-        Test.pb["T"]["a"] = self.c_b.t.a
-        Test.pb["T"]["b"] = self.c_t.b.decode("utf8")
         return Test.pb
 
 
