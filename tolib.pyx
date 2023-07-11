@@ -12,11 +12,11 @@ cdef class Test:
 
     cdef tolib.T* c_t
     cdef tolib.U* c_u
-    cdef tolib.B * c_b
+    cdef tolib.B* c_b
     cdef int i
     cdef float f
     cdef char* s
-    pt = {}
+    pb = {"T": {"a": 0, "b": ""}, "U": {}}
 
     def __cinit__(self, a: int, b: str, u_dict: dict):
         self.c_t = tolib.new_t(a, b.encode("utf8"))
@@ -24,19 +24,19 @@ cdef class Test:
         if u_dict.get("type") == "i":
             self.i = u_dict.get("data")
             self.c_u = tolib.new_u(&self.i, _type_)
+            Test.pb["U"]["c"] = self.c_u.c
         elif u_dict.get("type") == "f":
             self.f = u_dict.get("data")
             self.c_u = tolib.new_u(&self.f, _type_)
+            Test.pb["U"]["e"] = self.c_u.e
         elif u_dict.get("type") == "s":
             _data = u_dict.get("data").encode("utf8")
             self.s = _data
             self.c_u = tolib.new_u(self.s, _type_)
+            Test.pb["U"]["d"] = self.c_u.d.decode("utf8")
         else:
             self.c_u = tolib.new_u(self.s, _type_)
         self.c_b = tolib.new_b(self.c_t, self.c_u)
-
-
-
 
 
     def set_t(self, a1: int, b1: str):
@@ -50,18 +50,14 @@ cdef class Test:
         print(f"call c_call res: {res}")
 
 
-    def get_p_t(self):
-        Test.pt["p_a"] = self.c_t.a
-        Test.pt["p_b"] = self.c_t.b.decode("utf8")
-        return Test.pt
-
     def get_p_b(self):
-        print("call get_p_b")
-        print(self.c_b.u.d.decode("utf8"),  self.c_b.t.b, self.c_b.t.a)
+        Test.pb["T"]["a"] = self.c_b.t.a
+        Test.pb["T"]["b"] = self.c_t.b.decode("utf8")
+        return Test.pb
+
 
     def set_callback(self):
         return tolib.set_callback(<tolib.CallbackFunc>self.c_call, self.c_t)
-
 
     def __dealloc__(self):
         if self.c_t is not NULL:
